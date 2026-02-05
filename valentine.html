@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Will You Be My Valentine? 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: #fff;
+      text-align: center;
+      overflow-y: auto; /* allow vertical scrolling */
+      min-height: 100vh;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 30px 25px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      max-width: 420px;
+      width: 90%;
+      margin: 40px auto; /* center horizontally with space for scrolling */
+    }
+    h1 { font-size: 2rem; margin-bottom: 10px; }
+    h2 { margin-top: 10px; font-size: 1.3rem; }
+    p { font-size: 1.05rem; margin: 5px 0; }
+    img { max-width: 100%; border-radius: 15px; margin: 15px 0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+    .buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+    button {
+      border: none; padding: 10px 20px; font-size: 1rem; border-radius: 999px; cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.25); }
+    .yes { background: #ff4d6d; color: white; }
+    .no { background: #ffffff; color: #ff4d6d; }
+    .hidden { display: none; }
+    .celebrate { font-size: 1.4rem; margin-top: 15px; }
+    .hearts { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+    .heart { position:absolute; font-size:22px; pointer-events:none; transition: transform 0.3s ease, opacity 0.5s ease; opacity:1; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Hey Sarah, my little mouse 🐭💕</h1>
+    <p>I made this just for you...</p>
+
+    <img src="us.jpg" alt="Us" />
+
+    <h2>Will you be my Valentine, Sarah? 💌</h2>
+
+    <div class="buttons" id="buttons">
+      <button class="yes" id="yesButton">Yes!!! 💖</button>
+      <button class="no" onclick="sayNo()">No 😅</button>
+    </div>
+
+    <div id="response" class="hidden">
+      <div class="celebrate">GIMME KISS 😘💋💖</div>
+      <p>You just made me the happiest person ever.</p>
+      <p>I can't wait to spend Valentine’s Day with you ❤️</p>
+      <p style="margin-top: 15px; font-weight: bold;">Love always,<br/>Hayley 💌</p>
+    </div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+
+  <!-- AUDIO -->
+  <audio id="valentineSong" src="best-guess.mp3" loop></audio>
+
+  <script>
+    const heartsContainer = document.getElementById('hearts');
+    const emojis = ['❤️','💖','💘','💋','😘','💐','🥰'];
+    let heartsActive = false;
+
+    document.getElementById('yesButton').addEventListener('click', () => {
+      document.getElementById('buttons').classList.add('hidden');
+      document.getElementById('response').classList.remove('hidden');
+
+      // Play music
+      document.getElementById('valentineSong').play();
+
+      heartsActive = true;
+    });
+
+    function sayNo() {
+      alert('Are you sure? 😜 Try again...');
+    }
+
+    // Mouse movement hearts
+    document.addEventListener('mousemove', e => {
+      if (!heartsActive) return;
+      createHeart(e.pageX, e.pageY);
+    });
+
+    // Touch movement hearts for mobile
+    document.addEventListener('touchmove', e => {
+      if (!heartsActive) return;
+      const touch = e.touches[0];
+      createHeart(touch.pageX, touch.pageY);
+    });
+
+    function createHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      heart.style.left = x + 'px';
+      heart.style.top = y + 'px';
+      heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+      heartsContainer.appendChild(heart);
+
+      // Animate floating up and fading
+      setTimeout(() => {
+        heart.style.transform = `translateY(-50px) scale(1.5)`;
+        heart.style.opacity = '0';
+      }, 50);
+
+      // Remove from DOM after animation
+      setTimeout(() => heart.remove(), 600);
+    }
+  </script>
+</body>
+</html>
